@@ -1,0 +1,1 @@
+Start-Process "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "C:\email\email.html", "https://portal.azure.com"

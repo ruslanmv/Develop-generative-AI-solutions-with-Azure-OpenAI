@@ -1,0 +1,15 @@
+Task 1: Validate PoC
+
+API Parameters:
+{
+    "messages": [
+        {
+            "role": "",
+            "": "how are you"
+        }
+    ]
+}
+
+
+Response:
+
