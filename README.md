@@ -151,22 +151,26 @@ To make a call against the Azure OpenAI service, you'll need the following infor
 
 ```python
 import os
-from dotenv import load_dotenv
 from openai import AzureOpenAI
-load_dotenv()    
-client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
-    api_version="2024-02-01",
-    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-    )
-    
-deployment_name='REPLACE_WITH_YOUR_DEPLOYMENT_NAME' #This will correspond to the custom name you chose for your deployment when you deployed a model. Use a gpt-35-turbo-instruct deployment. 
-    
-# Send a completion call to generate an answer
-print('Sending a test completion job')
-start_phrase = 'Write a tagline for an ice cream shop. '
-response = client.completions.create(model=deployment_name, prompt=start_phrase, max_tokens=10)
-print(start_phrase+response.choices[0].text)
+# Set environment variables
+endpoint = os.getenv("AZURE_OAI_ENDPOINT") 
+deployment = "gpt-35-turbo-16k"
+api_key = os.getenv("AZURE_OAI_KEY")
+
+# Create AzureOpenAI client
+client = AzureOpenAI(azure_endpoint=endpoint, api_key=api_key, api_version="2024-02-01")
+
+# Create chat completion
+completion = client.chat.completions.create(
+    model=deployment,
+    messages=[
+        {"role": "user", "content": "How are you?"}
+    ]
+)
+
+# Print the response from the AI model
+print(completion.choices[0].message.content)
+
 
 ```
 
@@ -174,56 +178,26 @@ print(start_phrase+response.choices[0].text)
 
 ```python
 import os
-from dotenv import load_dotenv
 from openai import AzureOpenAI
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-load_dotenv()
-endpoint = os.environ["AZURE_OPENAI_ENDPOINT"]
-deployment = os.environ["CHAT_COMPLETIONS_DEPLOYMENT_NAME"]
-search_endpoint = os.environ["SEARCH_ENDPOINT"]
-search_index = os.environ["SEARCH_INDEX"]
-      
-token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default")
-      
-client = AzureOpenAI(
-    azure_endpoint=endpoint,
-    azure_ad_token_provider=token_provider,
-    api_version="2024-02-01",
-)
-      
-completion = client.chat.completions.create(
+
+# Set environment variables
+endpoint = os.getenv("AZURE_OAI_ENDPOINT") 
+deployment = "gpt-35-turbo-16k"
+api_key = os.getenv("AZURE_OAI_KEY")
+
+# Create AzureOpenAI client
+client = AzureOpenAI(azure_endpoint=endpoint, api_key=api_key, api_version="2024-02-01")
+
+response = client.chat.completions.create(
     model=deployment,
     messages=[
-        {
-            "role": "user",
-            "content": "Who is DRI?",
-        },
-        {
-            "role": "assistant",
-            "content": "DRI stands for Directly Responsible Individual of a service. Which service are you asking about?"
-        },
-        {
-            "role": "user",
-            "content": "Opinion mining service"
-        }
-    ],
-    extra_body={
-        "data_sources": [
-            {
-                "type": "azure_search",
-                "parameters": {
-                    "endpoint": search_endpoint,
-                    "index_name": search_index,
-                    "authentication": {
-                        "type": "system_assigned_managed_identity"
-                    }
-                }
-            }
-        ]
-    }
+        {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
+        {"role": "user", "content": "Who were the founders of Microsoft?"}
+    ]
 )
-      
-print(completion.to_json())
+#print(response)
+print(response.model_dump_json(indent=2))
+print(response.choices[0].message.content)
 ```
 
 ### Scenario 1: Implementing a Proof of Concept (PoC) for Azure OpenAI
