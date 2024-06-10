@@ -57,18 +57,14 @@ We can test our installation of our enviroment by typing
 ```bash
 jupyter lab
 ```
-
 ### Step 2 - Enable Azure OpenAI Service
 
 To build a generative AI solution with Azure OpenAI, the first step is to provision an Azure OpenAI resource in your Azure subscription.
 
 Azure OpenAI Service is currently in limited access. Apply for service access [here](https://aka.ms/oai/access).
 
-
 **Sign in to the Azure Portal:**
    - Go to the [Azure portal](https://portal.azure.com/) and sign in with your Azure account.
-
-
 
 **Create an Azure OpenAI resource:**
    - In the search bar, type "Azure OpenAI" and select it.
@@ -105,8 +101,6 @@ and copy the  KEY 1 and Endpoint
 ![](assets/2024-06-10-14-21-48.png)
 
 
-
-
 **Environment Variables:**
 Create and assign persistent environment variables for your key and endpoint. Create a `.env` file and add the environment variables:
 
@@ -114,8 +108,6 @@ Create and assign persistent environment variables for your key and endpoint. Cr
 AZURE_OAI_KEY="REPLACE_WITH_YOUR_KEY_VALUE_HERE"
 AZURE_OAI_ENDPOINT="REPLACE_WITH_YOUR_ENDPOINT_HERE"
 ```
-
-
 
 **Deploy the GPT-3.5-turbo-16k model:**
    - Once the resource is created, navigate to it.
@@ -353,8 +345,6 @@ def function2(aiClient, aiModel):
 main(function2)    
 ```
 
-
-
 ### Scenario 3: Using the PoC App for Developer Tasks
 
 In this scenario, we'll use the PoC app to assist with developer tasks such as code refactoring and unit testing. This demonstrates how Azure OpenAI can enhance productivity and streamline development workflows.
@@ -555,3 +545,13 @@ After making sure your environment is not active, type:
 ```
 conda remove --name azure --all
 ```
+
+
+**Conngratulations!**
+
+You could learn how to:  
+-  Generate and improve code by using Azure OpenAI
+-  Deploy an Azure OpenAI resource and an Azure OpenAI model
+-  Apply prompt engineering techniques by using Azure OpenAI
+-  Use Azure OpenAI on your data
+-  Generate natural language responses by using Azure OpenAI
