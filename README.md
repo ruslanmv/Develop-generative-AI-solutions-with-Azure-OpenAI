@@ -79,8 +79,11 @@ Azure OpenAI Service is currently in limited access. Apply for service access [h
    - Choose the subscription and resource group.
    - Select the region (ensure it matches the region, In my case I am  in Europe I use  France central).
    - Fill in the required details and create the resource.
+
 ![](assets/2024-06-10-14-16-57.png)
+
 ![](assets/2024-06-09-16-07-19.png)
+
 ![](assets/2024-06-10-13-54-51.png)
 
 ![](assets/2024-06-10-13-55-38.png)
