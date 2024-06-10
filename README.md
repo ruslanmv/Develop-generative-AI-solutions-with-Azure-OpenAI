@@ -47,6 +47,10 @@ The Python SDK is built and maintained by OpenAI.
 
 ```bash
 pip install openai==1.13.3 python-dotenv
+pip install openai==1.6.1 python-dotenv
+pip install azure-search-documents
+pip install azure-core
+ 
 ```
 We can test our installation of our enviroment by typing
 
@@ -68,31 +72,76 @@ Azure OpenAI Service is currently in limited access. Apply for service access [h
 
 **Create an Azure OpenAI resource:**
    - In the search bar, type "Azure OpenAI" and select it.
-
+![](assets/2024-06-10-14-15-00.png)
 
 ![](assets/2024-06-09-15-30-27.png)
 
    - Click "Create" to create a new Azure OpenAI resource.
-   - Choose the subscription and resource group.
-   - Select the region (ensure it matches the region).
-   - Fill in the required details and create the resource.
+![](assets/2024-06-10-14-15-23.png)
 
+   ![](assets/2024-06-10-13-51-12.png)
+   - Choose the subscription and resource group.
+   - Select the region (ensure it matches the region, In my case I am  in Europe I use  France central).
+   - Fill in the required details and create the resource.
+![](assets/2024-06-10-14-16-57.png)
 ![](assets/2024-06-09-16-07-19.png)
+![](assets/2024-06-10-13-54-51.png)
+
+![](assets/2024-06-10-13-55-38.png)
+
+and finally click
+![](assets/2024-06-10-14-17-36.png)
+
+
+when finish 
+![](assets/2024-06-10-14-18-19.png)
+
+Go to your resource in the Azure portal. The Keys and Endpoint can be found in the Resource Management section. Copy your endpoint and access key; you'll need both for authenticating your API calls. You can use either KEY1 or KEY2. Having two keys allows secure rotation and regeneration without causing service disruption.
+
+![](assets/2024-06-10-14-20-12.png)
+
+and copy the  KEY 1 and Endpoint
+
+![](assets/2024-06-10-14-21-48.png)
+
+
+
+
+**Environment Variables:**
+Create and assign persistent environment variables for your key and endpoint. Create a `.env` file and add the environment variables:
+
+```plaintext
+AZURE_OAI_KEY="REPLACE_WITH_YOUR_KEY_VALUE_HERE"
+AZURE_OAI_ENDPOINT="REPLACE_WITH_YOUR_ENDPOINT_HERE"
+```
+
 
 
 **Deploy the GPT-3.5-turbo-16k model:**
    - Once the resource is created, navigate to it.
 
-   ![](assets/2024-06-09-15-31-53.png)
+![](assets/2024-06-10-14-25-09.png)
 
 
    - In the left-hand menu, click on "Deployments".
+
+![](assets/2024-06-10-14-25-52.png)
+   
    - Click "Add" to deploy a new model.
    - Choose "GPT-3.5-turbo-16k" from the model list.
    - In the "Advanced options":
      - Set "Tokens per Minute Rate Limit (thousands)" to 5K.
      - Set "Enable Dynamic Quota" to Disabled.
    - Complete the deployment.
+![](assets/2024-06-10-14-27-12.png)
+
+you will have
+![](assets/2024-06-10-14-28-10.png)
+
+To test, just click open playgroud, and type something to see if works.
+![](assets/2024-06-10-14-29-25.png)
+
+Well done!.
 
 ### How to Perform Calls
 
@@ -104,17 +153,7 @@ To make a call against the Azure OpenAI service, you'll need the following infor
 | API-KEY | Found in the Keys and Endpoint section of your resource in the Azure portal. Use either KEY1 or KEY2. |
 | DEPLOYMENT-NAME | The custom name you chose for your deployment. Found under Resource Management > Model Deployments in the Azure portal or under Management > Deployments in Azure OpenAI Studio. |
 
-Go to your resource in the Azure portal. The Keys and Endpoint can be found in the Resource Management section. Copy your endpoint and access key; you'll need both for authenticating your API calls. You can use either KEY1 or KEY2. Having two keys allows secure rotation and regeneration without causing service disruption.
 
-![](assets/2024-06-09-22-02-45.png)
-
-**Environment Variables:**
-Create and assign persistent environment variables for your key and endpoint. Create a `.env` file and add the environment variables:
-
-```plaintext
-AZURE_OPENAI_API_KEY="REPLACE_WITH_YOUR_KEY_VALUE_HERE"
-AZURE_OPENAI_ENDPOINT="REPLACE_WITH_YOUR_ENDPOINT_HERE"
-```
 
 # Example 1
 
@@ -211,7 +250,6 @@ The solution must meet the following requirements:
 
 
 ```python
-
 import os
 from dotenv import load_dotenv
 import utils
@@ -225,12 +263,7 @@ def main(func):
         azure_oai_key = os.getenv("AZURE_OAI_KEY")
         azure_oai_model = os.getenv("AZURE_OAI_MODEL")
         # Define Azure OpenAI client (Add code here)
-        client = AzureOpenAI(
-            azure_endpoint=azure_oai_endpoint,
-            api_key=azure_oai_key,
-            api_version="0613"
-             #api_version="2023-12-01-preview"  # Modified to use the specified API version
-        )
+        client = AzureOpenAI(azure_endpoint=azure_oai_endpoint, api_key=azure_oai_key, api_version="2024-02-01")
         if callable(func):
             func(client, azure_oai_model)
         else:
@@ -255,8 +288,8 @@ def function1(aiClient, aiModel):
     }
     utils.writeLog("API Parameters:\n", apiParams)
     # Call chat completion connection. (Modified code)
-    response = aiClient.chat_completion(**apiParams)  # Modified to use the aiClient and **apiParams
-    
+
+    response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
     utils.writeLog("Response:\n", str(response))
     print("Response: " + response.choices[0].message.content + "\n")
     return response
@@ -311,9 +344,9 @@ def function2(aiClient, aiModel):
     utils.writeLog("API Parameters:\n", apiParams)
 
     # Call chat completion connection. (Modified code)
-    response = aiClient.chat_completion(**apiParams)
+    response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
     utils.writeLog("Response:\n", str(response))
-    print("Response+ response.choices[0].message.content + "\n")
+    print("Response"+ response.choices[0].message.content + "\n")
     return response
 
 # Call the main function with function2 as an argument
@@ -362,14 +395,14 @@ def function3(aiClient, aiModel):
     utils.writeLog("API Parameters:\n", apiParams)
 
     # Call chat completion connection. (Modified code)
-    response = aiClient.chat_completion(**apiParams)
+    response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
     
     utils.writeLog("Response:\n", str(response))
     print("Response: " + response.choices[0].message.content + "\n")
     return response
 
 # Call the main function with function2 as an argument
-main(function4)  
+main(function3)  
 ```
 
 
@@ -394,41 +427,114 @@ The solution must the following requirements:
 * Configure the search connection strings in the configuration file.
 * Send the following request to verify how the model answers the question: “When is the best time to visit London?”
 
+
+
+1. **Obtaining the Azure Search API Key:**
+
+   - Log in to the Azure portal (https://portal.azure.com).
+   - Navigate to your Azure Search resource. In this case, it's the `search41431948` resource.
+
+![](assets/2024-06-10-16-10-41.png)
+
+
+   - Once you're in the Azure Search resource, go to the "Keys" section. You can find this in the left-hand menu under "Settings."
+   - In the "Keys" section, you'll see two keys: a primary key and a secondary key. Either key will work, but it's recommended to use the primary key.
+   - Copy the primary key. This is your `search_api_key`.
+
+2. **Obtaining the Blob Storage Connection String:**
+
+   - Log in to the Azure portal (https://portal.azure.com).
+   - Navigate to your Azure Storage account. In this case, it's the storage account associated with `sa41431948`.
+   - Once you're in the Storage account, go to the "Access keys" section. You can find this in the left-hand menu under "Settings."
+   - In the "Access keys" section, you'll see two keys: a key1 and a key2. Again, either key will work, but it's recommended to use key1.
+   - Copy the "Connection string" under key1. This is your `blob_storage_connection_string`.
+![](assets/2024-06-10-16-15-17.png)
+After obtaining both the `search_api_key` and the `blob_storage_connection_string`, you can replace the placeholders in the code with these values. This ensures that your Python application can authenticate and access the Azure Search service and Blob Storage container.
+
+
+
 Here is the completed Python code based on the requests:
 
 ```python
-# Task 4: Use company data
+from azure.core.credentials import AzureKeyCredential
+from azure.search.documents import SearchClient
+import os
+from dotenv import load_dotenv
+from openai import AzureOpenAI
+load_dotenv()
+search_api_key = os.getenv("SEARCH_API_KEY") #"<your_search_api_key>"
+blob_storage_connection_string =os.getenv("CONNECTION_STRING") #"<your_blob_storage_connection_string>"
 def function4(aiClient, aiModel):
+    # Assuming you have the necessary Azure SDK installed and configured
+
+    # Load configuration file or define connection strings
+    search_service_name = "search41431948"
+    index_name = "pocindex"
+    search_api_key =search_api_key #"<your_search_api_key>"
+    blob_container_name = "sa41431948"
+    blob_storage_connection_string =blob_storage_connection_string #"<your_blob_storage_connection_string>"
+
+    # Initialize Azure Search client
+    search_client = SearchClient(account_url=f"https://{search_service_name}.search.windows.net/",
+                                 index_name=index_name,
+                                 credential=AzureKeyCredential(search_api_key))
+
     inputText = utils.getPromptInput("Task 4: Use company data", "sample-text.txt")
-    
-    # Build messages to send to Azure OpenAI model. (Added code)
+
+    # Build messages to send to Azure OpenAI model
     messages = [
-        {"role": "system", "content": "You are a helpful travel agent."},
         {"role": "user", "content": inputText}
     ]
-    
-    # Define connection and argument list (Added code)
-    from azure.ai.search import SearchClient
-    from azure.ai.search.models import QueryType
-    search_client = SearchClient("https://search41431948.search.windows.net/", "pocindex")
+
+    # Define argument list
     apiParams = {
-        "search_client": search_client,
-        "query": inputText,
-        "query_type": QueryType.KEYWORD
+        "model": aiModel,
+        "messages": messages,
+        "temperature": 0.5,  # Set temperature to 0.5
+        "max_tokens": 1000  # Set max tokens to 1000
     }
-    
+
     utils.writeLog("API Parameters:\n", apiParams)
-    
-    # Call search connection. (Added code)
-    response = search_client.search(**apiParams)
-    
+
+    # Call chat completion connection.
+    response = aiClient.chat.completions.create(**apiParams)
     utils.writeLog("Response:\n", str(response))
-    print("Response: " + response.results[0].text + "\n")
+
+    # Extract the user's query
+    user_query = response.choices[0].message.content
+
+    # Perform search on Azure AI Search
+    search_result = search_client.search(search_text=user_query, top=1)
+
+    if search_result:
+        # Extract the first result
+        first_result = search_result[0]
+
+        # Extract the system message
+        system_message = "You are a helpful travel agent."
+
+        # Build the response message
+        response_message = {
+            "role": "system",
+            "content": f"{system_message} {first_result['your_desired_field']}"  # Update 'your_desired_field' to your desired field from the search result
+        }
+
+        # Append the response message to the messages list
+        messages.append(response_message)
+
+        # Update apiParams with new messages
+        apiParams['messages'] = messages
+
+        # Call chat completion connection again with updated messages
+        response = aiClient.chat.completions.create(**apiParams)
+        utils.writeLog("Response:\n", str(response))
+        print("Response: " + response.choices[0].message.content + "\n")
+    else:
+        print("No search result found.")
+
     return response
-
-
- # Call the main function with function2 as an argument
-main(function5)     
+# Call the main function with function2 as an argument
+main(function4) 
 ```
 ## Troobleshootings
 
