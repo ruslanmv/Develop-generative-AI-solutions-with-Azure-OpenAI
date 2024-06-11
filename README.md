@@ -50,6 +50,8 @@ pip install openai==1.13.3 python-dotenv
 pip install openai==1.6.1 python-dotenv
 pip install azure-search-documents
 pip install azure-core
+pip install azure-storage-blob
+
  
 ```
 We can test our installation of our enviroment by typing
@@ -68,34 +70,32 @@ Azure OpenAI Service is currently in limited access. Apply for service access [h
 
 **Create an Azure OpenAI resource:**
    - In the search bar, type "Azure OpenAI" and select it.
-![](assets/2024-06-10-14-15-00.png)
+   
 
-![](assets/2024-06-09-15-30-27.png)
+
+![](assets/2024-06-11-12-29-39.png)
+
 
    - Click "Create" to create a new Azure OpenAI resource.
 ![](assets/2024-06-10-14-15-23.png)
 
-   ![](assets/2024-06-10-13-51-12.png)
+ #  ![](assets/2024-06-10-13-51-12.png)
    - Choose the subscription and resource group.
    - Select the region (ensure it matches the region, In my case I am  in Europe I use  France central).
    - Fill in the required details and create the resource.
 
-![](assets/2024-06-10-14-16-57.png)
 
-![](assets/2024-06-09-16-07-19.png)
-
-![](assets/2024-06-10-13-54-51.png)
-
-![](assets/2024-06-10-13-55-38.png)
-
-and finally click
-![](assets/2024-06-10-14-17-36.png)
+![](assets/2024-06-11-12-36-42.png)
 
 
-when finish 
-![](assets/2024-06-10-14-18-19.png)
+and finally next and click create to  finish 
 
-Go to your resource in the Azure portal. The Keys and Endpoint can be found in the Resource Management section. Copy your endpoint and access key; you'll need both for authenticating your API calls. You can use either KEY1 or KEY2. Having two keys allows secure rotation and regeneration without causing service disruption.
+
+![](assets/2024-06-10-18-22-53.png)
+
+
+![](assets/2024-06-10-18-23-50.png)
+When it is created, go to your resource in the Azure portal. The Keys and Endpoint can be found in the Resource Management section. Copy your endpoint and access key; you'll need both for authenticating your API calls. You can use either KEY1 or KEY2. Having two keys allows secure rotation and regeneration without causing service disruption.
 
 ![](assets/2024-06-10-14-20-12.png)
 
@@ -113,7 +113,7 @@ AZURE_OAI_ENDPOINT="REPLACE_WITH_YOUR_ENDPOINT_HERE"
 ```
 
 **Deploy the GPT-3.5-turbo-16k model:**
-   - Once the resource is created, navigate to it.
+   - Once the resource is created, navigate to it, go Azure OpenAI Studio,
 
 ![](assets/2024-06-10-14-25-09.png)
 
@@ -122,7 +122,7 @@ AZURE_OAI_ENDPOINT="REPLACE_WITH_YOUR_ENDPOINT_HERE"
 
 ![](assets/2024-06-10-14-25-52.png)
    
-   - Click "Add" to deploy a new model.
+   - Click "Create new depoyment" to deploy a new model.
    - Choose "GPT-3.5-turbo-16k" from the model list.
    - In the "Advanced options":
      - Set "Tokens per Minute Rate Limit (thousands)" to 5K.
@@ -155,25 +155,28 @@ To make a call against the Azure OpenAI service, you'll need the following infor
 ```python
 import os
 from openai import AzureOpenAI
+from dotenv import load_dotenv
+load_dotenv()
 # Set environment variables
-endpoint = os.getenv("AZURE_OAI_ENDPOINT") 
-deployment = "gpt-35-turbo-16k"
-api_key = os.getenv("AZURE_OAI_KEY")
+azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT") 
+azure_oai_deployment = "gpt-35-turbo-16k"
+azure_oai_key = os.getenv("AZURE_OAI_KEY")
 
 # Create AzureOpenAI client
-client = AzureOpenAI(azure_endpoint=endpoint, api_key=api_key, api_version="2024-02-01")
+client = AzureOpenAI(azure_endpoint=azure_oai_endpoint, 
+                     api_key=azure_oai_key, 
+                     api_version="2023-12-01-preview")
 
 # Create chat completion
 completion = client.chat.completions.create(
-    model=deployment,
+    model=azure_oai_deployment,
     messages=[
-        {"role": "user", "content": "How are you?"}
+        {"role": "user", "content": "I'd like to take a trip to New York. Where should I stay?"}
     ]
 )
 
 # Print the response from the AI model
 print(completion.choices[0].message.content)
-
 
 ```
 
@@ -203,6 +206,9 @@ print(response.model_dump_json(indent=2))
 print(response.choices[0].message.content)
 ```
 
+
+
+
 ### Scenario 1: Implementing a Proof of Concept (PoC) for Azure OpenAI
 
 In this scenario, we're tasked with deploying a GPT-35-turbo-16k model in Azure OpenAI and configuring a sample application to connect to the resources. This serves as our initial PoC to demonstrate the capabilities of Azure OpenAI.
@@ -216,6 +222,14 @@ The solution must meet the following requirements:
 * Configure the messages, API parameters, and call chat completion connection in the function1() function.
 * Validate the response using a sample text prompt file.
 * Set the Tokens per Minute Rate Limit (thousands) to 5K and Enable Dynamic Quota to Disabled in the Deploy model dialog box.
+
+
+First we create  a prompt1.txt file
+```
+What can a generative AI model do? Give me a short answer.
+```
+
+then the following function
 
 
 ```python
@@ -232,7 +246,7 @@ def main(func):
         azure_oai_key = os.getenv("AZURE_OAI_KEY")
         azure_oai_model = os.getenv("AZURE_OAI_MODEL")
         # Define Azure OpenAI client (Add code here)
-        client = AzureOpenAI(azure_endpoint=azure_oai_endpoint, api_key=azure_oai_key, api_version="2024-02-01")
+        client = AzureOpenAI(azure_endpoint=azure_oai_endpoint, api_key=azure_oai_key, api_version="2023-12-01-preview")
         if callable(func):
             func(client, azure_oai_model)
         else:
@@ -241,15 +255,15 @@ def main(func):
     except Exception as ex:
         print(ex)
 
+
 # Task 1: Validate PoC
 def function1(aiClient, aiModel):
-    inputText = utils.getPromptInput("Task 1: Validate PoC", "sample-text.txt")
+    inputText = utils.getPromptInput("Task 1: Validate PoC", "prompt1.txt")
     
     # Build messages to send to Azure OpenAI model. (Modified code)
     messages = [
         {"role": "user", "content": inputText}  # Modified to us"user" role and "content" key
     ]
-    
     # Define argument list (Modified code)
     apiParams = {
         "model": aiModel,  # Added model parameter
@@ -262,11 +276,25 @@ def function1(aiClient, aiModel):
     utils.writeLog("Response:\n", str(response))
     print("Response: " + response.choices[0].message.content + "\n")
     return response
-
 # Call the main function with function1 as an argument
 main(function1)
 
 ```
+
+Output
+
+```
+ould you like to type a prompt or text in file prompt1.txt? (type/file)
+...Reading text from prompt1.txt...
+
+
+...Sending the following request to Azure OpenAI...
+Request: What can a generative AI model do? Give me a short answer.
+
+Response: A generative AI model can create original and unique content, such as text, images, videos, and music, without explicit human guidance.
+
+```
+
 
 ### Scenario 2: Developing the PoC App for Company Chatbot
 
@@ -289,17 +317,23 @@ The solution must meet the following requirements:
 * Use prompt engineering techniques to ask the following question and get the response in both English and Spanish:
 	+ "What is the best way to find if a company is hiring?"
 
+First we create  a prompt2.txt file
+```
+What is the best way to find if a company is hiring?
+```
 
+then the following function:
 
 ```python
 # Task 2: Company chatbot
 def function2(aiClient, aiModel):
-    inputText = utils.getPromptInput("Task 2: Company chatbot", "sample-text.txt")
+    inputText = utils.getPromptInput("Task 2: Company chatbot", "prompt2.txt")
     
     # Build messages to send to Azure OpenAI model. (Added code)
     messages = [
+        {"role": "system", "content": "You are a helpful assistant.  Get the response in first in Spanish and then in English"},
         {"role": "user", "content": inputText},
-        {"role": "assistant", "content": "You can find it on the footer of every page on our website. Hope that helps! Thanks for using Contoso, Ltd."}
+        {"role": "assistant", "content": "Each response must be in a casual tone and end with 'Hope that helps! Thanks for using Contoso, Ltd.'"}
     ]
     
     # Define argument list (Modified code)
@@ -315,9 +349,12 @@ def function2(aiClient, aiModel):
     # Call chat completion connection. (Modified code)
     response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
     utils.writeLog("Response:\n", str(response))
-    print("Response"+ response.choices[0].message.content + "\n")
-    return response
+    
+    # Print the response (Modified code)
+    print("Response: " + response.choices[0].message.content + "\n")
 
+    return response
+example_prompt = " Where can I find the company phone number?"
 # Call the main function with function2 as an argument
 main(function2)    
 ```
@@ -338,31 +375,99 @@ The solution must meet the following requirements:
 * Generate five unit tests for the function in `fibonacci.py`.
 * Modify the prompt in `sample-text.txt` to accomplish each task.
 * Submit individual code generation requests for each task to Azure OpenAI using the PoC app.
+First we create  a prompt3.txt file
+'''
+Please add comments and generate documentation for the following Python code:
+```python
+def value(make, model, year, mileage, accidents):   
+    value = 10000   
 
+    if make == "Toyota":   
+        if model == "Camry":   
+            value -= 2000   
+        elif model == "Corolla":   
+            value -= 1500   
+        elif model == "Rav4":   
+            value -= 1000   
+    elif make == "Honda":   
+        if model == "Accord":   
+            value -= 2000   
+        elif model == "Civic":   
+            value -= 1500   
+        elif model == "CR-V":   
+            value -= 1000   
+    elif make == "Ford":   
+        if model == "Focus":   
+            value -= 2000   
+        elif model == "Fusion":   
+            value -= 1500   
+        elif model == "Escape":   
+            value -= 1000   
+   
+    if year < 2010:   
+        value -= 3000   
+    elif year < 2015:   
+        value -= 2000   
+    elif year < 2020:   
+        value -= 1000   
+   
+    if mileage > 100000:   
+        value -= 2000   
+    elif mileage > 50000:   
+        value -= 1000   
+   
+    if accidents > 3:   
+        value -= 2000   
+    elif accidents > 1:   
+        value -= 1000   
+
+    return value   
+
+car1 = calculate_car_value("Toyota", "Camry", 2014, 80000, 2)   
+print("Car 1 value:", car1)   
+
+car2 = calculate_car_value("Honda", "Accord", 2011, 120000, 0)   
+print("Car 2 value:", car2)   
+
+car3 = calculate_car_value("Ford", "Focus", 2018, 40000, 1)
+print("Car 3 value:", car3)
+```
+Please generate five unit tests for the following Python function:
+```python
+def findDifferenceCheckFibonacci(num1, num2):
+    diff = abs(num1 - num2)
+    if is_fibonacci(diff):
+        return f"The difference ({diff}) is in the Fibonacci sequence." 
+    else:  
+        return f"The difference ({diff}) is not in the Fibonacci sequence."
+```
+'''
+
+then the following function:
 
 ```python
-# Task 3: Developer tasks
 def function3(aiClient, aiModel):
-    inputText = utils.getPromptInput("Task 3: Developer tasks", "sample-text.txt")
-    
-    # Build messages to send to Azure OpenAI model. (Added code)
-    messages = [
+    inputText = utils.getPromptInput("Task 3: Developer tasks", "prompt3.txt")
+    # Provide a basic user message, and use the prompt content as the user message
+    system_message = "You are a helpful AI assistant that helps programmers write code."
+   
+    # Build messages to send to Azure OpenAI model
+    messages =[
+        {"role": "system", "content": system_message},
         {"role": "user", "content": inputText},
-        {"role": "assistant", "content": ""}  # Initialize response content
     ]
-    
-    # Define argument list (Modified code)
+        # Define argument list
     apiParams = {
         "model": aiModel,
         "messages": messages,
-        "temperature": 0.5,  # Set temperature to 0.5
+        "temperature": 0.7,  # Set temperature to 0.5
         "max_tokens": 1000  # Set max tokens to 1000
     }
-    
+
     utils.writeLog("API Parameters:\n", apiParams)
 
-    # Call chat completion connection. (Modified code)
-    response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
+    # Call the Azure OpenAI model
+    response = aiClient.chat.completions.create(**apiParams) # Use the aiClient and **apiParams
     
     utils.writeLog("Response:\n", str(response))
     print("Response: " + response.choices[0].message.content + "\n")
@@ -377,6 +482,80 @@ main(function3)
 ### Scenario 4: Using Company Data for Travel Recommendations
 
 Finally, we'll extend the PoC app to utilize our company's data to better answer customer questions related to travel. The goal is to connect the PoC app to an Azure AI Search resource that contains sample travel data, providing more accurate and relevant responses.
+
+
+
+Now you'll add some data for a fictional travel agent company named *Margie's Travel*. Then you'll see how the Azure OpenAI model responds when using the brochures from Margie's Travel as grounding data.
+
+
+
+1. In a new browser tab, download an archive of brochure data from `https://aka.ms/own-data-brochures`. Extract the brochures to a folder on your PC.
+1. In Azure OpenAI Studio, in the **Chat** playground, in the **Setup** section, select **Add your data**.
+1. Select **Add a data source** and choose **Upload files**.
+1. You'll need to create a storage account and Azure AI Search resource. Under the dropdown for the storage resource, select **Create a new Azure Blob storage resource**, and create a storage account with the following settings. Anything not specified leave as the default.
+
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Select the same resource group as your Azure OpenAI resource*
+    - **Storage account name**: *Enter a unique name*
+    - **Region**: *Select the same region as your Azure OpenAI resource*
+    - **Redundancy**: Locally-redundant storage (LRS)
+
+ 
+
+https://portal.azure.com/#browse/Microsoft.Storage%2FStorageAccounts
+![](assets/2024-06-11-17-29-38.png)
+
+wne then we create it 
+![](assets/2024-06-11-17-32-57.png)
+then we enter to 
+![](assets/2024-06-11-17-34-33.png)
+
+
+
+
+1. While the storage account resource is being created, return to Azure OpenAI Studio and select **Create a new Azure AI Search resource** with the following settings. Anything not specified leave as the default.
+https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/CognitiveSearch
+![](assets/2024-06-11-17-42-18.png)
+![](assets/2024-06-11-17-44-13.png)
+![](assets/2024-06-11-17-44-38.png)
+and then
+![](assets/2024-06-11-17-48-54.png)
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Select the same resource group as your Azure OpenAI resource*
+    - **Service name**: *Enter a unique name*
+    - **Location**: *Select the same location as your Azure OpenAI resource*
+    - **Pricing tier**: Basic
+![](assets/2024-06-11-17-43-04.png)
+1. Wait until your search resource has been deployed, then switch back to the Azure AI Studio.
+1. In the **Add data**, enter the following values for your data source, then select **Next**.
+
+    - **Select data source**: Upload files
+    - **Subscription**: Your Azure subscription
+    - **Select Azure Blob storage resource**: *Use the **Refresh** button to repopulate the list, and then choose the storage resource you created*
+        - Turn on CORS when prompted
+    - **Select Azure AI Search resource**: *Use the **Refresh** button to repopulate the list, and then choose the search resource you created*
+    - **Enter the index name**: `margiestravel`
+    - **Add vector search to this search resource**: unchecked
+    - **I acknowledge that connecting to an Azure AI Search account will incur usage to my account** : checked
+
+1. On the **Upload files** page, upload the PDFs you downloaded, and then select **Next**.
+1. On the **Data management** page select the **Keyword** search type from the drop-down, and then select **Next**.
+1. On the **Review and finish** page select **Save and close**, which will add your data. This may take a few minutes, during which you need to leave your window open. Once complete, you'll see the data source, search resource, and index specified in the **Setup** section.
+
+    > **Tip**: Occasionally the connection between your new search index and Azure OpenAI Studio takes too long. If you've waited for a few minutes and it still hasn't connected, check your AI Search resources in Azure portal. If you see the completed index, you can disconnect the data connection in Azure OpenAI Studio and re-add it by specifying an Azure AI Search data source and selecting your new index.
+
+## Chat with a model grounded in your data
+
+Now that you've added your data, ask the same questions as you did previously, and see how the response differs.
+
+```prompt
+I'd like to take a trip to New York. Where should I stay?
+```
+
+```prompt
+What are some facts about New York?
+```
+
 
 
 ### Using Company Data for Travel Recommendations
@@ -420,86 +599,137 @@ After obtaining both the `search_api_key` and the `blob_storage_connection_strin
 
 
 
+Now lets check with the folowing example if work the setup
+## Example 3
+```python
+
+import os
+from openai import AzureOpenAI
+from dotenv import load_dotenv
+load_dotenv()
+# Set environment variables
+azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT") 
+azure_oai_deployment = "gpt-35-turbo-16k"
+azure_oai_key = os.getenv("AZURE_OAI_KEY")
+
+azure_search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
+azure_search_key = os.getenv("AZURE_SEARCH_KEY")
+azure_search_index = os.getenv("AZURE_SEARCH_INDEX")
+
+# Create AzureOpenAI client
+client = AzureOpenAI(base_url=f"{azure_oai_endpoint}/openai/deployments/{azure_oai_deployment}/extensions",
+                     #azure_endpoint=azure_oai_endpoint, 
+                     api_key=azure_oai_key, 
+                     api_version="2023-12-01-preview")
+
+# Get the prompt
+text ="I'd like to take a trip to New York. Where should I stay?"
+print("...Sending the following request to Azure OpenAI endpoint...")
+print("Request: " + text + "\n")
+
+    # Configure your data source
+extension_config = dict(dataSources = [  
+    { 
+        "type": "AzureCognitiveSearch", 
+        "parameters": { 
+            "endpoint":azure_search_endpoint, 
+            "key": azure_search_key, 
+            "indexName": azure_search_index,
+        }
+    }]
+)
+
+response = client.chat.completions.create(
+    model = azure_oai_deployment,
+    temperature = 0.5,
+    max_tokens = 1000,
+    messages = [
+        {"role": "system", "content": "You are a helpful travel agent"},
+        {"role": "user", "content": text}
+    ],
+    extra_body = extension_config
+)
+# Print the response from the AI model
+print(response.choices[0].message.content)
+
+```
+Finally we create th prompt4.txt
+```
+I'd like to take a trip to New York. Where should I stay?
+```
+
+
 Here is the completed Python code based on the requests:
 
+
 ```python
-from azure.core.credentials import AzureKeyCredential
-from azure.search.documents import SearchClient
 import os
-from dotenv import load_dotenv
 from openai import AzureOpenAI
+from dotenv import load_dotenv
 load_dotenv()
-search_api_key = os.getenv("SEARCH_API_KEY") #"<your_search_api_key>"
-blob_storage_connection_string =os.getenv("CONNECTION_STRING") #"<your_blob_storage_connection_string>"
+# Set environment variables
+azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT") 
+azure_oai_deployment = "gpt-35-turbo-16k"
+azure_oai_key = os.getenv("AZURE_OAI_KEY")
+
+azure_search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
+azure_search_key = os.getenv("AZURE_SEARCH_KEY")
+azure_search_index = os.getenv("AZURE_SEARCH_INDEX")
+
+
+# Task 4: Use company data
 def function4(aiClient, aiModel):
-    # Assuming you have the necessary Azure SDK installed and configured
 
-    # Load configuration file or define connection strings
-    search_service_name = "search41431948"
-    index_name = "pocindex"
-    search_api_key =search_api_key #"<your_search_api_key>"
-    blob_container_name = "sa41431948"
-    blob_storage_connection_string =blob_storage_connection_string #"<your_blob_storage_connection_string>"
+    # Create AzureOpenAI client RAG
+    aiClient = AzureOpenAI(base_url=f"{azure_oai_endpoint}/openai/deployments/{azure_oai_deployment}/extensions",
+                        #azure_endpoint=azure_oai_endpoint, 
+                        api_key=azure_oai_key, 
+                        api_version="2023-12-01-preview")
 
-    # Initialize Azure Search client
-    search_client = SearchClient(account_url=f"https://{search_service_name}.search.windows.net/",
-                                 index_name=index_name,
-                                 credential=AzureKeyCredential(search_api_key))
+    inputText = utils.getPromptInput("Task 4: Use company data", "prompt4.txt")
+    
+    # Get the prompt
 
-    inputText = utils.getPromptInput("Task 4: Use company data", "sample-text.txt")
+    print("...Sending the following request to Azure OpenAI endpoint...")
+    print("Request: " + inputText + "\n")
 
-    # Build messages to send to Azure OpenAI model
-    messages = [
+    # Configure your data source
+    extension_config = dict(dataSources = [  
+        { 
+            "type": "AzureCognitiveSearch", 
+            "parameters": { 
+                "endpoint":azure_search_endpoint, 
+                "key": azure_search_key, 
+                "indexName": azure_search_index,
+            }
+        }]
+    )
+
+    # Build messages to send to Azure OpenAI model. (Add code here)   
+    messages=[
+        {"role": "system", "content": "You are a helpful travel agent"},
         {"role": "user", "content": inputText}
     ]
+
+    # Define connection and argument list (Add code here)
 
     # Define argument list
     apiParams = {
         "model": aiModel,
         "messages": messages,
         "temperature": 0.5,  # Set temperature to 0.5
-        "max_tokens": 1000  # Set max tokens to 1000
+        "max_tokens": 1000, # Set max tokens to 1000
+        "extra_body":extension_config #RAG wit Azure Search
     }
-
     utils.writeLog("API Parameters:\n", apiParams)
 
+    # Call chat completion connection. Will be the same as function1 (Add code here)
+    # Use the call name and **apiParams to reference our argument list
     # Call chat completion connection.
     response = aiClient.chat.completions.create(**apiParams)
     utils.writeLog("Response:\n", str(response))
-
-    # Extract the user's query
-    user_query = response.choices[0].message.content
-
-    # Perform search on Azure AI Search
-    search_result = search_client.search(search_text=user_query, top=1)
-
-    if search_result:
-        # Extract the first result
-        first_result = search_result[0]
-
-        # Extract the system message
-        system_message = "You are a helpful travel agent."
-
-        # Build the response message
-        response_message = {
-            "role": "system",
-            "content": f"{system_message} {first_result['your_desired_field']}"  # Update 'your_desired_field' to your desired field from the search result
-        }
-
-        # Append the response message to the messages list
-        messages.append(response_message)
-
-        # Update apiParams with new messages
-        apiParams['messages'] = messages
-
-        # Call chat completion connection again with updated messages
-        response = aiClient.chat.completions.create(**apiParams)
-        utils.writeLog("Response:\n", str(response))
-        print("Response: " + response.choices[0].message.content + "\n")
-    else:
-        print("No search result found.")
-
-    return response
+    print("Response: " + response.choices[0].message.content + "\n")
+    return
 # Call the main function with function2 as an argument
 main(function4) 
 ```
@@ -522,7 +752,6 @@ After making sure your environment is not active, type:
 ```
 conda remove --name azure --all
 ```
-
 
 **Conngratulations!**
 
