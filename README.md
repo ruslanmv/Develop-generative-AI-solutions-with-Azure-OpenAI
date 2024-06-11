@@ -358,6 +358,22 @@ example_prompt = " Where can I find the company phone number?"
 # Call the main function with function2 as an argument
 main(function2)    
 ```
+Output:
+
+```
+Would you like to type a prompt or text in file prompt2.txt? (type/file)
+...Reading text from prompt2.txt...
+
+
+...Sending the following request to Azure OpenAI...
+Request: What is the best way to find if a company is hiring?
+
+Response: La mejor manera de saber si una empresa está contratando es investigar en línea. Puedes visitar el sitio web de la empresa y buscar la sección de "Carreras" o "Trabaja con nosotros". Allí, podrás encontrar información sobre las vacantes disponibles y los requisitos para aplicar. También puedes seguir a la empresa en redes sociales, ya que a menudo publican anuncios de empleo. Otra opción es utilizar sitios web de búsqueda de empleo, donde puedes filtrar los resultados por empresa y ver si la empresa que te interesa tiene puestos vacantes. ¡Espero que eso te ayude! Gracias por usar Contoso, Ltd. 
+
+The best way to find out if a company is hiring is to do some online research. You can visit the company's website and look for the "Careers" or "Join Our Team" section. There, you can find information about available job positions and the requirements to apply. You can also follow the company on social media, as they often post job announcements. Another option is to use job search websites, where you can filter the results by company and see if the company you're interested in has any job openings. Hope that helps! Thanks for using Contoso, Ltd.
+
+```
+
 
 ### Scenario 3: Using the PoC App for Developer Tasks
 
@@ -477,6 +493,168 @@ def function3(aiClient, aiModel):
 main(function3)  
 ```
 
+Output:
+```
+Would you like to type a prompt or text in file prompt3.txt? (type/file)
+...Reading text from prompt3.txt...
+
+
+...Sending the following request to Azure OpenAI...
+Request: Please add comments and generate documentation for the following Python code:
+
+def value(make, model, year, mileage, accidents):   
+    value = 10000   
+
+    if make == "Toyota":   
+        if model == "Camry":   
+            value -= 2000   
+        elif model == "Corolla":   
+            value -= 1500   
+        elif model == "Rav4":   
+            value -= 1000   
+    elif make == "Honda":   
+        if model == "Accord":   
+            value -= 2000   
+        elif model == "Civic":   
+            value -= 1500   
+        elif model == "CR-V":   
+            value -= 1000   
+    elif make == "Ford":   
+        if model == "Focus":   
+            value -= 2000   
+        elif model == "Fusion":   
+            value -= 1500   
+        elif model == "Escape":   
+            value -= 1000   
+   
+    if year < 2010:   
+        value -= 3000   
+    elif year < 2015:   
+        value -= 2000   
+    elif year < 2020:   
+        value -= 1000   
+   
+    if mileage > 100000:   
+        value -= 2000   
+    elif mileage > 50000:   
+        value -= 1000   
+   
+    if accidents > 3:   
+        value -= 2000   
+    elif accidents > 1:   
+        value -= 1000   
+
+    return value   
+
+car1 = calculate_car_value("Toyota", "Camry", 2014, 80000, 2)   
+print("Car 1 value:", car1)   
+
+car2 = calculate_car_value("Honda", "Accord", 2011, 120000, 0)   
+print("Car 2 value:", car2)   
+
+car3 = calculate_car_value("Ford", "Focus", 2018, 40000, 1)
+print("Car 3 value:", car3)
+
+Please generate five unit tests for the following Python function:
+
+def findDifferenceCheckFibonacci(num1, num2):
+    diff = abs(num1 - num2)
+    if is_fibonacci(diff):
+        return f"The difference ({diff}) is in the Fibonacci sequence." 
+    else:  
+        return f"The difference ({diff}) is not in the Fibonacci sequence."
+
+
+Response: 
+# Function: value
+# Description: Calculates the value of a car based on make, model, year, mileage, and accidents.
+# Input:
+#   - make (string): The make of the car.
+#   - model (string): The model of the car.
+#   - year (int): The year the car was manufactured.
+#   - mileage (int): The mileage of the car.
+#   - accidents (int): The number of accidents the car has been in.
+# Output:
+#   - value (int): The calculated value of the car.
+def value(make, model, year, mileage, accidents):   
+    value = 10000   
+
+    if make == "Toyota":   
+        if model == "Camry":   
+            value -= 2000   
+        elif model == "Corolla":   
+            value -= 1500   
+        elif model == "Rav4":   
+            value -= 1000   
+    elif make == "Honda":   
+        if model == "Accord":   
+            value -= 2000   
+        elif model == "Civic":   
+            value -= 1500   
+        elif model == "CR-V":   
+            value -= 1000   
+    elif make == "Ford":   
+        if model == "Focus":   
+            value -= 2000   
+        elif model == "Fusion":   
+            value -= 1500   
+        elif model == "Escape":   
+            value -= 1000   
+   
+    if year < 2010:   
+        value -= 3000   
+    elif year < 2015:   
+        value -= 2000   
+    elif year < 2020:   
+        value -= 1000   
+   
+    if mileage > 100000:   
+        value -= 2000   
+    elif mileage > 50000:   
+        value -= 1000   
+   
+    if accidents > 3:   
+        value -= 2000   
+    elif accidents > 1:   
+        value -= 1000   
+
+    return value   
+
+car1 = calculate_car_value("Toyota", "Camry", 2014, 80000, 2)   
+print("Car 1 value:", car1)   
+
+car2 = calculate_car_value("Honda", "Accord", 2011, 120000, 0)   
+print("Car 2 value:", car2)   
+
+car3 = calculate_car_value("Ford", "Focus", 2018, 40000, 1)
+print("Car 3 value:", car3)
+
+
+Unit Test 1:
+
+assert value("Toyota", "Camry", 2014, 80000, 2) == 8000
+
+
+Unit Test 2:
+
+assert value("Honda", "Accord", 2011, 120000, 0) == 7000
+
+
+Unit Test 3:
+
+assert value("Ford", "Focus", 2018, 40000, 1) == 8500
+
+
+Unit Test 4:
+
+assert value("Toyota", "Corolla", 2012, 90000, 3) == 6500
+
+
+Unit Test 5:
+
+assert value("Honda", "Civic", 2015, 60000, 2) == 7500
+
+```
 
 
 ### Scenario 4: Using Company Data for Travel Recommendations
@@ -733,6 +911,28 @@ def function4(aiClient, aiModel):
 # Call the main function with function2 as an argument
 main(function4) 
 ```
+Output:
+```
+Would you like to type a prompt or text in file prompt4.txt? (type/file)
+...Reading text from prompt4.txt...
+
+
+...Sending the following request to Azure OpenAI...
+Request: I'd like to take a trip to New York. Where should I stay?
+
+...Sending the following request to Azure OpenAI endpoint...
+Request: I'd like to take a trip to New York. Where should I stay?
+
+Response: You have several accommodation options in New York provided by Margie's Travel [doc1]. Here are some options for you to consider:
+
+1. The Manhattan Hotel: Stay in the heart of New York City, within an easy walk to Times Square and Broadway [doc1].
+2. The Grand Central Hotel: Enjoy a comfortable stay in mid-town, close to Grand Central Station, the Chrysler Building, and the Empire State Building [doc1].
+3. The Park Hotel: Experience luxurious accommodation in upper Manhattan with views of Central Park [doc1].
+
+To book your trip to New York, you can visit Margie's Travel website at www.margiestravel.com [doc1].
+```
+
+
 ## Troobleshootings
 
 ### Updating Anaconda fails: Environment Not Writable Error
