@@ -95,6 +95,7 @@ and finally next and click create to  finish
 
 
 ![](assets/2024-06-10-18-23-50.png)
+
 When it is created, go to your resource in the Azure portal. The Keys and Endpoint can be found in the Resource Management section. Copy your endpoint and access key; you'll need both for authenticating your API calls. You can use either KEY1 or KEY2. Having two keys allows secure rotation and regeneration without causing service disruption.
 
 ![](assets/2024-06-10-14-20-12.png)
@@ -179,8 +180,20 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 
 ```
+Output:
+```
+New York City offers a range of accommodation options to suit different preferences and budgets. Here are a few popular areas to consider staying in:
+1. Manhattan: This is the heart of NYC and a convenient location for exploring popular attractions such as Times Square, Central Park, and the Empire State Building. It offers a wide range of hotels, from luxury options in uptown Manhattan to more affordable ones near Midtown or Downtown.
+2. Brooklyn: If you prefer a more laid-back and artistic vibe, consider staying in neighborhoods like Williamsburg or DUMBO. Brooklyn offers great views of the Manhattan skyline, trendy shops and restaurants, and easy access to attractions like the Brooklyn Bridge and Brooklyn Museum.
+3. Queens: This borough is less crowded and more affordable compared to Manhattan. It is home to diverse communities, delicious food, and attractions like Flushing Meadows-Corona Park and the USTA Billie Jean King National Tennis Center.
+4. Staten Island: This is a quieter option, away from the hustle and bustle of the city. It offers serene landscapes, beautiful parks, and attractions like the Staten Island Ferry and the Staten Island Museum.
+Consider your preferences, budget, and the areas you wish to explore when choosing your accommodation in New York.
+```
 
 # Example 2
+
+We want to convert our Assistant to Neko.
+![](assets/2024-06-12-15-08-24.png)
 
 ```python
 import os
@@ -197,19 +210,28 @@ client = AzureOpenAI(azure_endpoint=endpoint, api_key=api_key, api_version="2024
 response = client.chat.completions.create(
     model=deployment,
     messages=[
-        {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
+        {"role": "system", "content": "You are a Neko Assitant, and at the end of each conversation you says Nya!"},
         {"role": "user", "content": "Who were the founders of Microsoft?"}
     ]
 )
 #print(response)
-print(response.model_dump_json(indent=2))
+#print(response.model_dump_json(indent=2))
 print(response.choices[0].message.content)
+```
+Output:
+```
+The founders of Microsoft are Bill Gates and Paul Allen. Nya!
+
 ```
 
 
+Now we are able to proceed with the scenarios.
 
 
-### Scenario 1:  Deploying a GPT-35-turbo-16k model in Azure OpenAI
+
+# 1.  Deploying a GPT-35-turbo-16k model in Azure OpenAI
+
+![](assets/2024-06-12-15-10-00.png)
 
 In this scenario, we're tasked with deploying a GPT-35-turbo-16k model in Azure OpenAI and configuring a sample application to connect to the resources. This serves as our initial PoC to demonstrate the capabilities of Azure OpenAI.
 
@@ -295,7 +317,9 @@ Response: A generative AI model can create original and unique content, such as 
 ```
 
 
-### 2. Prompt Engineering for Azure OpenAI 
+# 2. Prompt Engineering for Azure OpenAI 
+
+![](assets/2024-06-12-15-13-32.png)
 
 Here, we'll further develop the PoC app to explore the potential of Azure OpenAI for company chatbot functionality. The goal is to develop an app that provides responses in a casual tone, limited to 1,000 tokens, and with a temperature of 0.5.
 
@@ -374,7 +398,9 @@ The best way to find out if a company is hiring is to do some online research. Y
 ```
 
 
-###  3. Code Generation  for Developer Tasks
+# 3. Code Generation  for Developer Tasks
+
+![](assets/2024-06-12-15-10-47.png)
 
 In this scenario, we'll use the PoC app to assist with developer tasks such as code refactoring and unit testing. This demonstrates how Azure OpenAI can enhance productivity and streamline development workflows.
 
@@ -639,6 +665,8 @@ assert value("Honda", "Civic", 2015, 60000, 2) == 7500
 
 
 ###  4. Implement Retrieval Augmented Generation (RAG) with Azure OpenAI Service
+
+![](assets/2024-06-12-15-11-30.png)
 
 ### Fine-tuning vs. RAG
 Fine-tuning is a technique used to create a custom model by training an existing foundational model such as gpt-35-turbo with a dataset of additional training data. Fine-tuning can result in higher quality requests than prompt engineering alone, customize the model on examples larger than can fit in a prompt, and allow the user to provide fewer examples to get the same high quality response. However, the process for fine-tuning is both costly and time intensive, and should only be used for use cases where it's necessary.
