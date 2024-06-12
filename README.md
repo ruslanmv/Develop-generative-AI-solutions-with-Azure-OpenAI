@@ -696,11 +696,6 @@ then we click on create.
 ![](assets/2024-06-11-17-32-57.png)
 
 
-
-
-
-
-
 then we enter to 
 ![](assets/2024-06-11-17-34-33.png)
 
@@ -721,9 +716,6 @@ On the **Upload files** page, upload the PDFs you downloaded.
 ![](assets/2024-06-11-17-44-38.png)
 and then
 ![](assets/2024-06-11-17-48-54.png)
-
-
-
 
 
 ![](assets/2024-06-11-17-43-04.png)
@@ -777,12 +769,11 @@ What are some facts about New York?
 1. **Obtaining the Azure Search API Key:**
 
    - Log in to the Azure portal (https://portal.azure.com).
-   - Navigate to your Azure Search resource. In this case, it's the `search4rag` resource.
-
-
+   - Navigate to your Azure Search resource. In this case, it's the `aisearch4rag` resource.
    - Once you're in the Azure Search resource, go to the "Keys" section. You can find this in the left-hand menu under "Settings."
    - In the "Keys" section, you'll see two keys: a primary key and a secondary key. Either key will work, but it's recommended to use the primary key.
    - Copy the primary key. This is your `search_api_key`.
+   ![](assets/2024-06-12-14-04-46.png)
 
 2. **Obtaining the Blob Storage Connection String:**
 
@@ -791,8 +782,10 @@ What are some facts about New York?
    - Once you're in the Storage account, go to the "Access keys" section. You can find this in the left-hand menu under "Settings."
    - In the "Access keys" section, you'll see two keys: a key1 and a key2. Again, either key will work, but it's recommended to use key1.
    - Copy the "Connection string" under key1. This is your `blob_storage_connection_string`.
+    ![](assets/2024-06-12-14-05-53.png)
 
-After obtaining both the `search_api_key` and the `blob_storage_connection_string`, you can replace the placeholders in the code with these values. This ensures that your Python application can authenticate and access the Azure Search service and Blob Storage container.
+After obtaining both the `search_api_key` and the `blob_storage_connection_string`, you can replace the placeholders in the code with these values. 
+This ensures that your Python application can authenticate and access the Azure Search service and Blob Storage container.
 
 
 
