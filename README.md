@@ -677,7 +677,7 @@ Now you'll add some data for a fictional travel agent company named *Margie's Tr
 
 3.  **Create a new Azure Blob storage account**, and create a storage account with the following settings. Anything not specified leave as the default.
 
-4. In a new browser tab, download an archive of brochure data from `https://aka.ms/own-data-brochures`. 
+4. In a new browser tab, download an archive of brochure data from [here](https://aka.ms/own-data-brochures). 
 
 5. Extract the brochures to a folder on your PC.
     - **Subscription**: *Your Azure subscription*
