@@ -223,7 +223,6 @@ The solution must meet the following requirements:
 * Validate the response using a sample text prompt file.
 * Set the Tokens per Minute Rate Limit (thousands) to 5K and Enable Dynamic Quota to Disabled in the Deploy model dialog box.
 
-
 First we create  a prompt1.txt file
 ```
 What can a generative AI model do? Give me a short answer.
@@ -658,6 +657,11 @@ assert value("Honda", "Civic", 2015, 60000, 2) == 7500
 
 
 ###  4. Implement Retrieval Augmented Generation (RAG) with Azure OpenAI Service
+
+### Fine-tuning vs. RAG
+Fine-tuning is a technique used to create a custom model by training an existing foundational model such as gpt-35-turbo with a dataset of additional training data. Fine-tuning can result in higher quality requests than prompt engineering alone, customize the model on examples larger than can fit in a prompt, and allow the user to provide fewer examples to get the same high quality response. However, the process for fine-tuning is both costly and time intensive, and should only be used for use cases where it's necessary.
+
+RAG with Azure OpenAI on your data still uses the stateless API to connect to the model, which removes the requirement of training a custom model with your data and simplifies the interaction with the AI model. AI Search first finds the useful information to answer the prompt, adds that to the prompt as grounding data, and Azure OpenAI forms the response based on that information.
 
 Finally, we'll extend the PoC app to utilize our company's data to better answer customer questions related to travel. The goal is to connect the PoC app to an Azure AI Search resource that contains sample travel data, providing more accurate and relevant responses.
 
