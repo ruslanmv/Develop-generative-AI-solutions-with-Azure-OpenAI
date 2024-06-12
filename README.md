@@ -281,17 +281,17 @@ def main(func):
 def function1(aiClient, aiModel):
     inputText = utils.getPromptInput("Task 1: Validate PoC", "prompt1.txt")
     
-    # Build messages to send to Azure OpenAI model. (Modified code)
+    # Build messages to send to Azure OpenAI model. 
     messages = [
         {"role": "user", "content": inputText}  # Modified to us"user" role and "content" key
     ]
-    # Define argument list (Modified code)
+    # Define argument list 
     apiParams = {
         "model": aiModel,  # Added model parameter
         "messages": messages,
     }
     utils.writeLog("API Parameters:\n", apiParams)
-    # Call chat completion connection. (Modified code)
+    # Call chat completion connection. 
 
     response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
     utils.writeLog("Response:\n", str(response))
@@ -359,7 +359,7 @@ def function2(aiClient, aiModel):
         {"role": "assistant", "content": "Each response must be in a casual tone and end with 'Hope that helps! Thanks for using Contoso, Ltd.'"}
     ]
     
-    # Define argument list (Modified code)
+    # Define argument list 
     apiParams = {
         "model": aiModel,
         "messages": messages,
@@ -369,11 +369,11 @@ def function2(aiClient, aiModel):
     
     utils.writeLog("API Parameters:\n", apiParams)
 
-    # Call chat completion connection. (Modified code)
+    # Call chat completion connection. 
     response = aiClient.chat.completions.create(**apiParams) # Modified to use the aiClient and **apiParams
     utils.writeLog("Response:\n", str(response))
     
-    # Print the response (Modified code)
+    # Print the response 
     print("Response: " + response.choices[0].message.content + "\n")
 
     return response
