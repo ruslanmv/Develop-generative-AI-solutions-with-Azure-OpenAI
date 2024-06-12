@@ -719,16 +719,17 @@ Optionally, you can  add the index by using the json file [here](index.json)
 with their respective url.
 ![](assets/2024-06-12-14-36-23.png)
 ### Adding Indexer
-In this part we should click on inderxers and clcik in add indexer then we choose a  name like `azure-blob-indexer`
+In this part we should click on indexers and click in add indexer then we choose a  name like `azure-blob-indexer`
 the index `azure-blob-index` and the datasource the blob `storage4rag`
 and we click save and then run.
 ![](assets/2024-06-12-09-44-50.png)
 
-
+and wait until success.
 ![](assets/2024-06-12-14-17-49.png)
 
 
 ### Using Company Data for Travel Recommendations
+To complete the .env file we requiere add additional credentials to our enviroment. For different tasks.
 
 1. **Obtaining the Azure Search API Key:**
 
@@ -765,8 +766,6 @@ AZURE_SEARCH_ENDPOINT=
 AZURE_SEARCH_KEY=
 AZURE_SEARCH_INDEX=
 ```
-
-
 
 Now lets check with the folowing example if work the setup
 ## Example 3
