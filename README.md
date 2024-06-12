@@ -1,4 +1,4 @@
-# Develop Generative AI Solutions With Azure OpenAI
+# How to Develop Generative AI Solutions With Azure OpenAI
 
 ## Introduction
 
