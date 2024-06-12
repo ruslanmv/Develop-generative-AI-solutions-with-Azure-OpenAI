@@ -562,8 +562,6 @@ def findDifferenceCheckFibonacci(num1, num2):
         return f"The difference ({diff}) is in the Fibonacci sequence." 
     else:  
         return f"The difference ({diff}) is not in the Fibonacci sequence."
-
-
 Response: 
 # Function: value
 # Description: Calculates the value of a car based on make, model, year, mileage, and accidents.
@@ -618,39 +616,21 @@ def value(make, model, year, mileage, accidents):
         value -= 1000   
 
     return value   
-
 car1 = calculate_car_value("Toyota", "Camry", 2014, 80000, 2)   
 print("Car 1 value:", car1)   
-
 car2 = calculate_car_value("Honda", "Accord", 2011, 120000, 0)   
 print("Car 2 value:", car2)   
-
 car3 = calculate_car_value("Ford", "Focus", 2018, 40000, 1)
 print("Car 3 value:", car3)
-
-
 Unit Test 1:
-
 assert value("Toyota", "Camry", 2014, 80000, 2) == 8000
-
-
 Unit Test 2:
-
 assert value("Honda", "Accord", 2011, 120000, 0) == 7000
-
-
 Unit Test 3:
-
 assert value("Ford", "Focus", 2018, 40000, 1) == 8500
-
-
 Unit Test 4:
-
 assert value("Toyota", "Corolla", 2012, 90000, 3) == 6500
-
-
 Unit Test 5:
-
 assert value("Honda", "Civic", 2015, 60000, 2) == 7500
 
 ```
@@ -664,8 +644,6 @@ Fine-tuning is a technique used to create a custom model by training an existing
 RAG with Azure OpenAI on your data still uses the stateless API to connect to the model, which removes the requirement of training a custom model with your data and simplifies the interaction with the AI model. AI Search first finds the useful information to answer the prompt, adds that to the prompt as grounding data, and Azure OpenAI forms the response based on that information.
 
 Finally, we'll extend the PoC app to utilize our company's data to better answer customer questions related to travel. The goal is to connect the PoC app to an Azure AI Search resource that contains sample travel data, providing more accurate and relevant responses.
-
-
 
 Now you'll add some data for a fictional travel agent company named *Margie's Travel*. Then you'll see how the Azure OpenAI model responds when using the brochures from Margie's Travel as grounding data.
 
@@ -691,19 +669,14 @@ Now you'll add some data for a fictional travel agent company named *Margie's Tr
     - **Redundancy**: Locally-redundant storage (LRS)
 
       
-
 then we click on create.
 ![](assets/2024-06-11-17-32-57.png)
-
 
 then we enter to 
 ![](assets/2024-06-11-17-34-33.png)
 
 
-
 On the **Upload files** page, upload the PDFs you downloaded.
-
-
 
 ## Azure AI Search resource
 
@@ -712,11 +685,14 @@ On the **Upload files** page, upload the PDFs you downloaded.
 3. With the following settings. Anything not specified leave as the default.
 
 ![](assets/2024-06-11-17-42-18.png)
-![](assets/2024-06-11-17-44-13.png)
-![](assets/2024-06-11-17-44-38.png)
-and then
-![](assets/2024-06-11-17-48-54.png)
 
+![](assets/2024-06-11-17-44-13.png)
+
+![](assets/2024-06-11-17-44-38.png)
+
+and then
+
+![](assets/2024-06-11-17-48-54.png)
 
 ![](assets/2024-06-11-17-43-04.png)
 
@@ -728,41 +704,27 @@ We go to azure search, we click on indexes
 
 ![](assets/2024-06-12-09-29-28.png)
 
-
-
 ## Creation of index
 
 In the search management click create a index
 
 
 ![](assets/2024-06-12-10-29-24.png)
-keep that is enabled searchable
 
-then we add indexer
-we choose  a  name like azure-blob-indexer
-the index `azure-blob-index`
-and the datasource the blob
-and we click save and then run
+Keep that is enabled searchable,then we add indexer, we choose a  name like azure-blob-indexer
+the index `azure-blob-index` and the datasource the blob `storage4rag`
+and we click save and then run.
+
 ![](assets/2024-06-12-09-44-50.png)
 
 
 ![](assets/2024-06-12-14-17-49.png)
 
-1. Wait until your search resource has been deployed, then switch back to the Azure AI Studio.
-1. On the **Data management** page select the **Keyword** search type from the drop-down, and then select **Next**.
-1. On the **Review and finish** page select **Save and close**, which will add your data. This may take a few minutes, during which you need to leave your window open. Once complete, you'll see the data source, search resource, and index specified in the **Setup** section.
+Optionally, you can  add the index by using the json file [here](index.json)
+![](assets/2024-06-12-14-35-28.png)
+with their respective url.
+![](assets/2024-06-12-14-36-23.png)
 
-## Chat with a model grounded in your data
-
-Now that you've added your data, ask the same questions as you did previously, and see how the response differs.
-
-```prompt
-I'd like to take a trip to New York. Where should I stay?
-```
-
-```prompt
-What are some facts about New York?
-```
 
 ### Using Company Data for Travel Recommendations
 
@@ -786,6 +748,21 @@ What are some facts about New York?
 
 After obtaining both the `search_api_key` and the `blob_storage_connection_string`, you can replace the placeholders in the code with these values. 
 This ensures that your Python application can authenticate and access the Azure Search service and Blob Storage container.
+
+
+## Testing your envioment
+
+Now that you've added your data, ask the same questions as you did previously, and see how the response differs.
+
+1. Wait until your search resource has been deployed and add the .env file their respecitive credentials.
+```
+AZURE_OAI_ENDPOINT=
+AZURE_OAI_KEY=
+AZURE_OAI_MODEL=
+AZURE_SEARCH_ENDPOINT=
+AZURE_SEARCH_KEY=
+AZURE_SEARCH_INDEX=
+```
 
 
 
@@ -841,14 +818,27 @@ response = client.chat.completions.create(
 )
 # Print the response from the AI model
 print(response.choices[0].message.content)
+```
+
+Output
+
 
 ```
-Finally we create th prompt4.txt
+...Sending the following request to Azure OpenAI endpoint...
+Request: I'd like to take a trip to New York. Where should I stay?
+
+You have several options for accommodation in New York City. Margie's Travel offers the following hotels in New York:
+
+1. The Manhattan Hotel: Located in the heart of New York City, within an easy walk to Times Square and Broadway [doc1].
+2. The Grand Central Hotel: A comfortable mid-town hotel close to Grand Central Station, the Chrysler Building, and the Empire State Building [doc1].
+3. The Park Hotel: Luxurious accommodation in upper Manhattan, with views of Central Park [doc1].
+
+To book your trip to New York, you can visit the Margie's Travel website at www.margiestravel.com [doc1].
+```
+Now that it works we can just create a prompt4.txt
 ```
 I'd like to take a trip to New York. Where should I stay?
 ```
-
-
 Here is the completed Python code based on the requests:
 
 
