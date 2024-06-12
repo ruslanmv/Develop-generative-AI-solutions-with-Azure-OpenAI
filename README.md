@@ -745,8 +745,8 @@ and the datasource the blob
 and we click save and then run
 ![](assets/2024-06-12-09-44-50.png)
 
-![](assets/2024-06-12-09-45-29.png)
 
+![](assets/2024-06-12-14-17-49.png)
 
 1. Wait until your search resource has been deployed, then switch back to the Azure AI Studio.
 1. On the **Data management** page select the **Keyword** search type from the drop-down, and then select **Next**.
