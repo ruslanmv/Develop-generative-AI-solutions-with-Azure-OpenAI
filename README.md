@@ -714,18 +714,16 @@ In the search management click create a index
 Keep that is enabled searchable,then we add indexer, we choose a  name like azure-blob-indexer
 the index `azure-blob-index` and the datasource the blob `storage4rag`
 and we click save and then run.
-
+Optionally, you can  add the index by using the json file [here](index.json)
+![](assets/2024-06-12-14-35-28.png)
+with their respective url.
+![](assets/2024-06-12-14-36-23.png)
 ### Adding Indexer
 
 ![](assets/2024-06-12-09-44-50.png)
 
 
 ![](assets/2024-06-12-14-17-49.png)
-
-Optionally, you can  add the index by using the json file [here](index.json)
-![](assets/2024-06-12-14-35-28.png)
-with their respective url.
-![](assets/2024-06-12-14-36-23.png)
 
 
 ### Using Company Data for Travel Recommendations
