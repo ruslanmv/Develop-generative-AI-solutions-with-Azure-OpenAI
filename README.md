@@ -46,7 +46,7 @@ python -m ipykernel install --user --name azure --display-name "Python 3.11 (Azu
 The Python SDK is built and maintained by OpenAI.
 
 ```bash
-pip install openai==1.13.3 python-dotenv
+
 pip install openai==1.6.1 python-dotenv
 pip install azure-search-documents
 pip install azure-core
@@ -665,22 +665,17 @@ Finally, we'll extend the PoC app to utilize our company's data to better answer
 
 Now you'll add some data for a fictional travel agent company named *Margie's Travel*. Then you'll see how the Azure OpenAI model responds when using the brochures from Margie's Travel as grounding data.
 
-
-
-1. In a new browser tab, download an archive of brochure data from `https://aka.ms/own-data-brochures`. Extract the brochures to a folder on your PC.
-1. In Azure OpenAI Studio, in the **Chat** playground, in the **Setup** section, select **Add your data**.
-1. Select **Add a data source** and choose **Upload files**.
-1. You'll need to create a storage account and Azure AI Search resource. Under the dropdown for the storage resource, select **Create a new Azure Blob storage resource**, and create a storage account with the following settings. Anything not specified leave as the default.
-
+1. You'll need to create a storage account and Azure AI Search resource. 
+2. Go to [storage resource](https://portal.azure.com/#browse/Microsoft.Storage%2FStorageAccounts)  
+3. select **Create a new Azure Blob storage resource**, and create a storage account with the following settings. Anything not specified leave as the default.
+4. In a new browser tab, download an archive of brochure data from `https://aka.ms/own-data-brochures`. 
+5. Extract the brochures to a folder on your PC.
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select the same resource group as your Azure OpenAI resource*
     - **Storage account name**: *Enter a unique name*
     - **Region**: *Select the same region as your Azure OpenAI resource*
     - **Redundancy**: Locally-redundant storage (LRS)
-
  
-
-https://portal.azure.com/#browse/Microsoft.Storage%2FStorageAccounts
 ![](assets/2024-06-11-17-29-38.png)
 
 wne then we create it 
@@ -688,11 +683,10 @@ wne then we create it
 then we enter to 
 ![](assets/2024-06-11-17-34-33.png)
 
+1. **Create a new Azure AI Search resource** 
+2. Got to [AI Search resource](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/CognitiveSearch)
+3. With the following settings. Anything not specified leave as the default.
 
-
-
-1. While the storage account resource is being created, return to Azure OpenAI Studio and select **Create a new Azure AI Search resource** with the following settings. Anything not specified leave as the default.
-https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/CognitiveSearch
 ![](assets/2024-06-11-17-42-18.png)
 ![](assets/2024-06-11-17-44-13.png)
 ![](assets/2024-06-11-17-44-38.png)
@@ -704,23 +698,43 @@ and then
     - **Location**: *Select the same location as your Azure OpenAI resource*
     - **Pricing tier**: Basic
 ![](assets/2024-06-11-17-43-04.png)
+
+We go to azure search, we click on indexes
+
+![](assets/2024-06-12-09-29-28.png)
+
+then we create a index
+
+![](assets/2024-06-12-09-30-25.png)
+
+then we click on
+![](assets/2024-06-12-10-29-24.png)
+keep that is enabled searchable
+
+then we add indexer
+we choose  a  name like azure-blob-indexer
+the index azure-blox-index
+and the datasource the blob
+and we click save and then run
+![](assets/2024-06-12-09-44-50.png)
+
+![](assets/2024-06-12-09-45-29.png)
+
+
 1. Wait until your search resource has been deployed, then switch back to the Azure AI Studio.
 1. In the **Add data**, enter the following values for your data source, then select **Next**.
-
     - **Select data source**: Upload files
     - **Subscription**: Your Azure subscription
     - **Select Azure Blob storage resource**: *Use the **Refresh** button to repopulate the list, and then choose the storage resource you created*
         - Turn on CORS when prompted
     - **Select Azure AI Search resource**: *Use the **Refresh** button to repopulate the list, and then choose the search resource you created*
-    - **Enter the index name**: `margiestravel`
+    - **Enter the index name**: `azure-index`
     - **Add vector search to this search resource**: unchecked
     - **I acknowledge that connecting to an Azure AI Search account will incur usage to my account** : checked
 
 1. On the **Upload files** page, upload the PDFs you downloaded, and then select **Next**.
 1. On the **Data management** page select the **Keyword** search type from the drop-down, and then select **Next**.
 1. On the **Review and finish** page select **Save and close**, which will add your data. This may take a few minutes, during which you need to leave your window open. Once complete, you'll see the data source, search resource, and index specified in the **Setup** section.
-
-    > **Tip**: Occasionally the connection between your new search index and Azure OpenAI Studio takes too long. If you've waited for a few minutes and it still hasn't connected, check your AI Search resources in Azure portal. If you see the completed index, you can disconnect the data connection in Azure OpenAI Studio and re-add it by specifying an Azure AI Search data source and selecting your new index.
 
 ## Chat with a model grounded in your data
 
