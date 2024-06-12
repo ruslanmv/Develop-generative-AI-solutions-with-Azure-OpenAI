@@ -715,6 +715,8 @@ Keep that is enabled searchable,then we add indexer, we choose a  name like azur
 the index `azure-blob-index` and the datasource the blob `storage4rag`
 and we click save and then run.
 
+### Adding Indexer
+
 ![](assets/2024-06-12-09-44-50.png)
 
 
