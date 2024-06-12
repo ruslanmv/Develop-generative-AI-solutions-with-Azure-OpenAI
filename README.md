@@ -8,7 +8,7 @@ We'll guide you through the environment setup and discuss four different  steps 
 
 1. **Enable Azure OpenAI Service**: Deploy a GPT-35-turbo-16k model in Azure OpenAI and configure a sample application to connect to the resources.
 2. **Prompt Engineering for Azure OpenAI**: Explore the potential of Azure OpenAI for company chatbot functionality, focusing on casual tone responses.
-3. **Code Generation  for Developer Tasks **: Utilize an app to assist with developer tasks such as code refactoring and unit testing.
+3. **Code Generation  for Developer Tasks**: Utilize an app to assist with developer tasks such as code refactoring and unit testing.
 4. **Implement Retrieval Augmented Generation (RAG) with Azure OpenAI Service**: Extend the app to utilize company data for providing accurate travel recommendations.
 
 ## Environment Setup
@@ -391,9 +391,11 @@ The solution must meet the following requirements:
 * Modify the prompt in `sample-text.txt` to accomplish each task.
 * Submit individual code generation requests for each task to Azure OpenAI using the PoC app.
 First we create  a prompt3.txt file
-'''
+
+
+```
 Please add comments and generate documentation for the following Python code:
-```python
+
 def value(make, model, year, mileage, accidents):   
     value = 10000   
 
@@ -446,17 +448,17 @@ print("Car 2 value:", car2)
 
 car3 = calculate_car_value("Ford", "Focus", 2018, 40000, 1)
 print("Car 3 value:", car3)
-```
+
 Please generate five unit tests for the following Python function:
-```python
+
 def findDifferenceCheckFibonacci(num1, num2):
     diff = abs(num1 - num2)
     if is_fibonacci(diff):
         return f"The difference ({diff}) is in the Fibonacci sequence." 
     else:  
         return f"The difference ({diff}) is not in the Fibonacci sequence."
+
 ```
-'''
 
 then the following function:
 
