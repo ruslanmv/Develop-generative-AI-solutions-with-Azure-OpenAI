@@ -4,12 +4,12 @@
 
 Hello everyone! In this blog post, we're going to explore how to create some  applications using the Azure OpenAI SDK. Azure OpenAI brings the power of OpenAI's generative models to the Azure platform, making it easier than ever to integrate advanced AI capabilities into your applications.
 
-We'll guide you through the environment setup and discuss four different scenarios where you can implement a Proof of Concept (PoC) using Azure OpenAI:
+We'll guide you through the environment setup and discuss four different  steps using Azure OpenAI:
 
-1. **Implementing a Proof of Concept (PoC) for Azure OpenAI**: Deploy a GPT-35-turbo-16k model in Azure OpenAI and configure a sample application to connect to the resources.
-2. **Developing the PoC App for Company Chatbot**: Explore the potential of Azure OpenAI for company chatbot functionality, focusing on casual tone responses.
-3. **Using the PoC App for Developer Tasks**: Utilize the PoC app to assist with developer tasks such as code refactoring and unit testing.
-4. **Using Company Data for Travel Recommendations**: Extend the PoC app to utilize company data for providing accurate travel recommendations.
+1. **Enable Azure OpenAI Service**: Deploy a GPT-35-turbo-16k model in Azure OpenAI and configure a sample application to connect to the resources.
+2. **Prompt Engineering for Azure OpenAI**: Explore the potential of Azure OpenAI for company chatbot functionality, focusing on casual tone responses.
+3. **Code Generation  for Developer Tasks **: Utilize an app to assist with developer tasks such as code refactoring and unit testing.
+4. **Implement Retrieval Augmented Generation (RAG) with Azure OpenAI Service**: Extend the app to utilize company data for providing accurate travel recommendations.
 
 ## Environment Setup
 
@@ -26,7 +26,7 @@ conda create -n azure python==3.11 ipykernel
 then we activate
 ```bash
  conda activate azure, 
- ```
+```
 You can install Jupyter Lab if you like
 ```bash
 pip install jupyter notebook
@@ -70,7 +70,7 @@ Azure OpenAI Service is currently in limited access. Apply for service access [h
 
 **Create an Azure OpenAI resource:**
    - In the search bar, type "Azure OpenAI" and select it.
-   
+
 
 
 ![](assets/2024-06-11-12-29-39.png)
@@ -121,7 +121,7 @@ AZURE_OAI_ENDPOINT="REPLACE_WITH_YOUR_ENDPOINT_HERE"
    - In the left-hand menu, click on "Deployments".
 
 ![](assets/2024-06-10-14-25-52.png)
-   
+
    - Click "Create new depoyment" to deploy a new model.
    - Choose "GPT-3.5-turbo-16k" from the model list.
    - In the "Advanced options":
@@ -209,7 +209,7 @@ print(response.choices[0].message.content)
 
 
 
-### Scenario 1: Implementing a Proof of Concept (PoC) for Azure OpenAI
+### Scenario 1:  Deploying a GPT-35-turbo-16k model in Azure OpenAI
 
 In this scenario, we're tasked with deploying a GPT-35-turbo-16k model in Azure OpenAI and configuring a sample application to connect to the resources. This serves as our initial PoC to demonstrate the capabilities of Azure OpenAI.
 
@@ -296,7 +296,7 @@ Response: A generative AI model can create original and unique content, such as 
 ```
 
 
-### Scenario 2: Developing the PoC App for Company Chatbot
+### 2. Prompt Engineering for Azure OpenAI 
 
 Here, we'll further develop the PoC app to explore the potential of Azure OpenAI for company chatbot functionality. The goal is to develop an app that provides responses in a casual tone, limited to 1,000 tokens, and with a temperature of 0.5.
 
@@ -375,11 +375,11 @@ The best way to find out if a company is hiring is to do some online research. Y
 ```
 
 
-### Scenario 3: Using the PoC App for Developer Tasks
+###  3. Code Generation  for Developer Tasks
 
 In this scenario, we'll use the PoC app to assist with developer tasks such as code refactoring and unit testing. This demonstrates how Azure OpenAI can enhance productivity and streamline development workflows.
 
-### Using the PoC App for Developer Tasks
+### Using the PoC App for Dveloper Tasks
 
 We have been tasked with using the Proof of Concept (PoC) app to help with developer tasks, such as code refactoring and unit testing. The goal is to modify th`function3` function of the PoC app to successfully complete the following tasks:
 
@@ -657,7 +657,7 @@ assert value("Honda", "Civic", 2015, 60000, 2) == 7500
 ```
 
 
-### Scenario 4: Using Company Data for Travel Recommendations
+###  4. Implement Retrieval Augmented Generation (RAG) with Azure OpenAI Service
 
 Finally, we'll extend the PoC app to utilize our company's data to better answer customer questions related to travel. The goal is to connect the PoC app to an Azure AI Search resource that contains sample travel data, providing more accurate and relevant responses.
 
@@ -666,22 +666,47 @@ Finally, we'll extend the PoC app to utilize our company's data to better answer
 Now you'll add some data for a fictional travel agent company named *Margie's Travel*. Then you'll see how the Azure OpenAI model responds when using the brochures from Margie's Travel as grounding data.
 
 1. You'll need to create a storage account and Azure AI Search resource. 
+
 2. Go to [storage resource](https://portal.azure.com/#browse/Microsoft.Storage%2FStorageAccounts)  
-3. select **Create a new Azure Blob storage resource**, and create a storage account with the following settings. Anything not specified leave as the default.
+
+    ![](assets/2024-06-11-17-29-38.png)
+
+3.  **Create a new Azure Blob storage account**, and create a storage account with the following settings. Anything not specified leave as the default.
+
 4. In a new browser tab, download an archive of brochure data from `https://aka.ms/own-data-brochures`. 
+
 5. Extract the brochures to a folder on your PC.
     - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Select the same resource group as your Azure OpenAI resource*
-    - **Storage account name**: *Enter a unique name*
-    - **Region**: *Select the same region as your Azure OpenAI resource*
-    - **Redundancy**: Locally-redundant storage (LRS)
- 
-![](assets/2024-06-11-17-29-38.png)
 
-wne then we create it 
+    - **Resource group**: *Select the same resource group as your Azure OpenAI resource*
+
+    - **Storage account name**: *Enter a unique name*
+
+    - **Region**: *Select the same region as your Azure OpenAI resource*
+
+    - **Redundancy**: Locally-redundant storage (LRS)
+
+      
+
+then we click on create.
 ![](assets/2024-06-11-17-32-57.png)
+
+
+
+
+
+
+
 then we enter to 
 ![](assets/2024-06-11-17-34-33.png)
+
+
+
+On the **Upload files** page, upload the PDFs you downloaded.
+
+
+
+## Azure AI Search resource
 
 1. **Create a new Azure AI Search resource** 
 2. Got to [AI Search resource](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/CognitiveSearch)
@@ -692,28 +717,34 @@ then we enter to
 ![](assets/2024-06-11-17-44-38.png)
 and then
 ![](assets/2024-06-11-17-48-54.png)
-    - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Select the same resource group as your Azure OpenAI resource*
-    - **Service name**: *Enter a unique name*
-    - **Location**: *Select the same location as your Azure OpenAI resource*
-    - **Pricing tier**: Basic
+
+
+
+
+
 ![](assets/2024-06-11-17-43-04.png)
+
+And Finally you have your instance of Azure Search  ready for RAG
+
+![](assets/2024-06-12-12-23-26.png)
 
 We go to azure search, we click on indexes
 
 ![](assets/2024-06-12-09-29-28.png)
 
-then we create a index
 
-![](assets/2024-06-12-09-30-25.png)
 
-then we click on
+## Creation of index
+
+In the search management click create a index
+
+
 ![](assets/2024-06-12-10-29-24.png)
 keep that is enabled searchable
 
 then we add indexer
 we choose  a  name like azure-blob-indexer
-the index azure-blox-index
+the index `azure-blob-index`
 and the datasource the blob
 and we click save and then run
 ![](assets/2024-06-12-09-44-50.png)
@@ -722,17 +753,6 @@ and we click save and then run
 
 
 1. Wait until your search resource has been deployed, then switch back to the Azure AI Studio.
-1. In the **Add data**, enter the following values for your data source, then select **Next**.
-    - **Select data source**: Upload files
-    - **Subscription**: Your Azure subscription
-    - **Select Azure Blob storage resource**: *Use the **Refresh** button to repopulate the list, and then choose the storage resource you created*
-        - Turn on CORS when prompted
-    - **Select Azure AI Search resource**: *Use the **Refresh** button to repopulate the list, and then choose the search resource you created*
-    - **Enter the index name**: `azure-index`
-    - **Add vector search to this search resource**: unchecked
-    - **I acknowledge that connecting to an Azure AI Search account will incur usage to my account** : checked
-
-1. On the **Upload files** page, upload the PDFs you downloaded, and then select **Next**.
 1. On the **Data management** page select the **Keyword** search type from the drop-down, and then select **Next**.
 1. On the **Review and finish** page select **Save and close**, which will add your data. This may take a few minutes, during which you need to leave your window open. Once complete, you'll see the data source, search resource, and index specified in the **Setup** section.
 
@@ -748,31 +768,12 @@ I'd like to take a trip to New York. Where should I stay?
 What are some facts about New York?
 ```
 
-
-
 ### Using Company Data for Travel Recommendations
-
-We have been tasked with extending the Proof of Concept (PoC) app to use our own company data to better answer customer questions related to travel. The goal is to connect the PoC app to use the search41431948 Azure AI Search resource that contains sample travel data.
-
-#### Requirements:
-
-The solution must the following requirements:
-
-* search41431948 must train on the data in the sa41431948/blob1 Azure Blob Storage container.
-* The index must be named pocindex.
-* The search type must be Keyword.
-* You must use a system message of “You are a helpful travel agent.”
-* Configure the search connection strings in the configuration file.
-* Send the following request to verify how the model answers the question: “When is the best time to visit London?”
-
-
 
 1. **Obtaining the Azure Search API Key:**
 
    - Log in to the Azure portal (https://portal.azure.com).
-   - Navigate to your Azure Search resource. In this case, it's the `search41431948` resource.
-
-![](assets/2024-06-10-16-10-41.png)
+   - Navigate to your Azure Search resource. In this case, it's the `search4rag` resource.
 
 
    - Once you're in the Azure Search resource, go to the "Keys" section. You can find this in the left-hand menu under "Settings."
@@ -782,11 +783,11 @@ The solution must the following requirements:
 2. **Obtaining the Blob Storage Connection String:**
 
    - Log in to the Azure portal (https://portal.azure.com).
-   - Navigate to your Azure Storage account. In this case, it's the storage account associated with `sa41431948`.
+   - Navigate to your Azure Storage account. .
    - Once you're in the Storage account, go to the "Access keys" section. You can find this in the left-hand menu under "Settings."
    - In the "Access keys" section, you'll see two keys: a key1 and a key2. Again, either key will work, but it's recommended to use key1.
    - Copy the "Connection string" under key1. This is your `blob_storage_connection_string`.
-![](assets/2024-06-10-16-15-17.png)
+
 After obtaining both the `search_api_key` and the `blob_storage_connection_string`, you can replace the placeholders in the code with these values. This ensures that your Python application can authenticate and access the Azure Search service and Blob Storage container.
 
 
