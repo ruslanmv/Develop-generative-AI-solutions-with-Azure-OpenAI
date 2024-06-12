@@ -266,7 +266,7 @@ def main(func):
         azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT")
         azure_oai_key = os.getenv("AZURE_OAI_KEY")
         azure_oai_model = os.getenv("AZURE_OAI_MODEL")
-        # Define Azure OpenAI client (Add code here)
+        # Define Azure OpenAI client 
         client = AzureOpenAI(azure_endpoint=azure_oai_endpoint, api_key=azure_oai_key, api_version="2023-12-01-preview")
         if callable(func):
             func(client, azure_oai_model)
@@ -914,13 +914,13 @@ def function4(aiClient, aiModel):
         }]
     )
 
-    # Build messages to send to Azure OpenAI model. (Add code here)   
+    # Build messages to send to Azure OpenAI model.    
     messages=[
         {"role": "system", "content": "You are a helpful travel agent"},
         {"role": "user", "content": inputText}
     ]
 
-    # Define connection and argument list (Add code here)
+    # Define connection and argument list 
 
     # Define argument list
     apiParams = {
@@ -932,7 +932,7 @@ def function4(aiClient, aiModel):
     }
     utils.writeLog("API Parameters:\n", apiParams)
 
-    # Call chat completion connection. Will be the same as function1 (Add code here)
+    # Call chat completion connection. Will be the same as function1 
     # Use the call name and **apiParams to reference our argument list
     # Call chat completion connection.
     response = aiClient.chat.completions.create(**apiParams)
